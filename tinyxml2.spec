@@ -5,13 +5,13 @@
 Summary:	Simple, small, efficient, C++ XML parser
 Summary(pl.UTF-8):	Prosty, mały, efektywny parser XML w C++
 Name:		tinyxml2
-Version:	4.0.1
+Version:	7.0.1
 Release:	1
 License:	BSD-like
 Group:		Libraries
 #Source0Download: https://github.com/leethomason/tinyxml2/releases
 Source0:	https://github.com/leethomason/tinyxml2/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	36aed868b751e728fa8f714aa3376a1d
+# Source0-md5:	bc3c806033a2cb426db0fdb75e5b1bf2
 URL:		https://github.com/leethomason/tinyxml2
 BuildRequires:	cmake >= 2.6
 BuildRequires:	libstdc++-devel
@@ -54,15 +54,36 @@ Statyczna biblioteka TinyXML-2.
 %setup -q
 
 %build
-%cmake . \
-	%{?with_static_libs:-DBUILD_STATIC_LIBS=ON}
+# note: .pc file creation expects include and lib dirs relative to CMAKE_INSTALL_PREFIX
+%if %{with static_libs}
+install -d build-static
+cd build-static
+%cmake .. \
+	-DCMAKE_INSTALL_INCLUDEDIR=include \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
+	-DBUILD_SHARED_LIBS=OFF
+%{__make}
+cd ..
+%endif
+
+install -d build
+cd build
+%cmake .. \
+	-DCMAKE_INSTALL_INCLUDEDIR=include \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib}
 
 %{__make}
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%if %{with static_libs}
+%{__make} -C build-static install \
+	DESTDIR=$RPM_BUILD_ROOT
+%endif
+
+%{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
@@ -75,12 +96,13 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc readme.md
 %attr(755,root,root) %{_libdir}/libtinyxml2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libtinyxml2.so.4
+%attr(755,root,root) %ghost %{_libdir}/libtinyxml2.so.7
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libtinyxml2.so
 %{_includedir}/tinyxml2.h
+%{_libdir}/cmake/tinyxml2
 %{_pkgconfigdir}/tinyxml2.pc
 
 %if %{with static_libs}
