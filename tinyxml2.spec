@@ -5,13 +5,13 @@
 Summary:	Simple, small, efficient, C++ XML parser
 Summary(pl.UTF-8):	Prosty, mały, efektywny parser XML w C++
 Name:		tinyxml2
-Version:	7.1.0
+Version:	8.0.0
 Release:	1
 License:	BSD-like
 Group:		Libraries
 #Source0Download: https://github.com/leethomason/tinyxml2/releases
 Source0:	https://github.com/leethomason/tinyxml2/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	8a02c592702dcc7a061932425d8f3087
+# Source0-md5:	5dc535c8b34ee621fe2128f072d275b5
 URL:		https://github.com/leethomason/tinyxml2
 BuildRequires:	cmake >= 2.6
 BuildRequires:	libstdc++-devel
@@ -96,7 +96,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc readme.md
 %attr(755,root,root) %{_libdir}/libtinyxml2.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libtinyxml2.so.7
+%attr(755,root,root) %ghost %{_libdir}/libtinyxml2.so.8
 
 %files devel
 %defattr(644,root,root,755)
