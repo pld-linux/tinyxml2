@@ -15,6 +15,7 @@ Source0:	https://github.com/leethomason/tinyxml2/archive/%{version}/%{name}-%{ve
 URL:		https://github.com/leethomason/tinyxml2
 BuildRequires:	cmake >= 3.15
 BuildRequires:	libstdc++-devel
+BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
